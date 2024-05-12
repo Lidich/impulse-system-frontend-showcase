@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+
+<!-- Load d3.js -->
+<script src="d3.v7.js"></script>
+
+<div id="top-menu">
+    <span style="background-color: red;">status: </span>
+    <span id="status" style="background-color: red;">status</span>
+    <br>
+    <button id="addButton">
+        add
+    </button>
+    <button id="addNewNodeButton">
+        add new node
+    </button>
+    <button id="addNewLinkButton">
+        add new link
+    </button>
+    <button id="editNodeButton">
+        edit node
+    </button>
+    <button id="testButton">
+        test button
+    </button>
+</div>
+
+<!-- The form -->
+<div class="form-popup" id="myForm">
+    <form action="/action_page.php" class="form-container">
+      <h1>Edit node</h1>
+  
+      <label for="nodeName"><b>Node name</b></label>
+      <input id="editNodeNameInput" type="text" placeholder="Enter node name" name="nodeName" required>
+  
+      <label for="nodeValue"><b>Node value</b></label>
+      <input id="editNodeValueInput" type="number" placeholder="Enter node value" name="nodeValue" required>
+  
+      <button id="submitEditNodeButton" type="button" class="btn">Submit</button>
+      <button type="button" class="btn">Delete</button>
+      <button id="editNodeCloseButton" type="button" class="btn cancel">Close</button>
+    </form>
+  </div>
+
+<div id="container"></div>
+
+<script type="module" src="createScript.js"></script>
