@@ -110,9 +110,10 @@ var node = svg.append("g")
     node = node
     .data(nodes)
     .join(
-      enter => enter.append("circle").attr("r", 0).attr("fill", d => color(d.group)).on("click", nodeClicked)
+      enter => enter.append("circle").attr("r", 0).attr("fill", d => color(d.value/1000)).on("click", nodeClicked)
         .call(enter => enter.transition().attr("r", 50)),
-      update => update,
+      update => update.transition() // Добавляем переход для плавного обновления
+      .attr("fill", d => color(d.value / 1000)), // Обновляем цвет для существующих узлов,
       exit => exit.remove()
     );
   }
@@ -425,7 +426,7 @@ editNodeCloseButton.addEventListener('click', () => {
 
 //TEST BUTTON
 testButton.addEventListener('click', () => {
-  fillNodeMatrix()
+  console.log(nodes)
   for (let i = 0; i < nodeMatrix.length; i++) {
     let row = '';
     for (let j = 0; j < nodeMatrix[i].length; j++) {
