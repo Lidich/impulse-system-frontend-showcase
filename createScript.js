@@ -350,7 +350,7 @@ function nodeClicked(event) {
     var tempNode = event.srcElement.__data__
     tempNodeForEdit = tempNode
     document.getElementById("editNodeNameInput").value = tempNode.text
-    document.getElementById("editNodeValueInput").value = tempNode.group
+    document.getElementById("editNodeValueInput").value = tempNode.value
     openForm()
     statusFlag = statusFlagConstants.idle
     setStatusText()
