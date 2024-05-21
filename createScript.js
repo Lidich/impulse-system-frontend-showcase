@@ -49,6 +49,17 @@ console.log(color)
 var links = data.links.map(d => ({ ...d }));
 var nodes = data.nodes.map(d => ({ ...d }));
 
+let maxNodeValue = 0
+let minNodeValue = 9999999
+
+function updateMinMaxNodeValue(){
+   nodes.forEach(element =>{
+    if (element.value>maxNodeValue) maxNodeValue = element.value
+    if (element.value<minNodeValue) minNodeValue = element.value
+   })
+}
+
+updateMinMaxNodeValue()
 
 // Create a simulation with several forces.
 var simulation = d3.forceSimulation(nodes)
@@ -104,16 +115,16 @@ var node = svg.append("g")
   .data(nodes)
   .join("circle")
   .attr("r", 50)
-  .attr("fill", d => color(d.value/1000)).on("click", nodeClicked);
+  .attr("fill", d => color((d.value-minNodeValue)/(maxNodeValue-minNodeValue+1))).on("click", nodeClicked);
 
   function updateNodeView(){
     node = node
     .data(nodes)
     .join(
-      enter => enter.append("circle").attr("r", 0).attr("fill", d => color(d.value/1000)).on("click", nodeClicked)
+      enter => enter.append("circle").attr("r", 0).attr("fill", d => color((d.value-minNodeValue)/(maxNodeValue-minNodeValue+1))).on("click", nodeClicked)
         .call(enter => enter.transition().attr("r", 50)),
       update => update.transition() // Добавляем переход для плавного обновления
-      .attr("fill", d => color(d.value / 1000)), // Обновляем цвет для существующих узлов,
+      .attr("fill", d => color((d.value-minNodeValue)/(maxNodeValue-minNodeValue+1))), // Обновляем цвет для существующих узлов,
       exit => exit.remove()
     );
   }
@@ -320,6 +331,7 @@ function addNewLink() {
 
 function nodeClicked(event) {
   console.log(event.srcElement.__data__)
+  console.log((event.srcElement.__data__.value-minNodeValue)/(maxNodeValue-minNodeValue+1))
   if (statusFlag == statusFlagConstants.addLinkStart) {
     firstNodeForLink = event.srcElement.__data__
     statusFlag = statusFlagConstants.addLinkFirstSelected
@@ -360,6 +372,8 @@ function spawn(source) {
 }
 
 function reRender() {
+  updateMinMaxNodeValue()
+
   updateLineView()
 
   updateNodeView()
@@ -426,7 +440,11 @@ editNodeCloseButton.addEventListener('click', () => {
 
 //TEST BUTTON
 testButton.addEventListener('click', () => {
-  console.log(nodes)
+  console.log(maxNodeValue)
+  console.log(minNodeValue)
+
+  reRender()
+
   for (let i = 0; i < nodeMatrix.length; i++) {
     let row = '';
     for (let j = 0; j < nodeMatrix[i].length; j++) {
