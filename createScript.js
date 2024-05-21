@@ -41,7 +41,8 @@ const height = 1080;
 let mouse = null;
 
 // Specify the color scale.
-const color = d3.scaleOrdinal(d3.schemeCategory10);
+const color = d3.scaleSequential(d3.interpolatePiYG);
+console.log(color)
 
 // The force simulation mutates links and nodes, so create a copy
 // so that re-evaluating this cell produces the same result.
@@ -65,20 +66,36 @@ var svg = d3.create("svg")
   // .on("click", clicked)
   .on("click", svgClicked)
 
-// Add a line for each link, and a circle for each node.
+// Добавляем SVG элемент для маркера стрелки
+svg.append("defs").append("marker")
+  .attr("id", "arrowhead")
+  .attr("viewBox", "0 0 10 10")
+  .attr("refX", 25) // Убедитесь, что значение refX соответствует длине стрелки
+  .attr("refY", 5)
+  .attr("markerWidth", 3)
+  .attr("markerHeight", 3)
+  .attr("orient", "auto")
+  .append("path")
+  .attr("d", "M 0 0 L 10 5 L 0 10 Z") // Треугольная стрелка
+  .attr("fill", "#999");
+
+// Добавляем линии для рёбер
 var link = svg.append("g")
   .attr("stroke", "#999")
   .attr("stroke-opacity", 0.6)
-  .selectAll()
+  .selectAll("line")
   .data(links)
   .join("line")
-  .attr("stroke-width", d => 10*Math.sqrt(d.value));
+  .attr("stroke-width", d => 10 * Math.sqrt(d.value))
+  .attr("marker-end", "url(#arrowhead)"); // Используем маркер стрелки
 
-  function updateLineView(){
-    link = link
+function updateLineView() {
+  link = link
     .data(links)
-    .join("line").attr("stroke-width", d => 10*Math.sqrt(d.value));
-  }
+    .join("line")
+    .attr("stroke-width", d => 10 * Math.sqrt(d.value))
+    .attr("marker-end", "url(#arrowhead)"); // Убедитесь, что маркер стрелки обновляется
+}
 
 var node = svg.append("g")
   .attr("stroke", "#fff")
@@ -87,7 +104,7 @@ var node = svg.append("g")
   .data(nodes)
   .join("circle")
   .attr("r", 50)
-  .attr("fill", d => color(d.group)).on("click", nodeClicked);
+  .attr("fill", d => color(d.value/1000)).on("click", nodeClicked);
 
   function updateNodeView(){
     node = node
@@ -297,7 +314,6 @@ function addNewLink() {
     label: "1"
   }
   links.push(newLink);
-
   reRender()
 }
 
@@ -407,6 +423,18 @@ editNodeCloseButton.addEventListener('click', () => {
   document.getElementById("myForm").style.display = "none";
 });
 
+//TEST BUTTON
+testButton.addEventListener('click', () => {
+  fillNodeMatrix()
+  for (let i = 0; i < nodeMatrix.length; i++) {
+    let row = '';
+    for (let j = 0; j < nodeMatrix[i].length; j++) {
+      row += nodeMatrix[i][j] + ' ';
+    }
+    console.log(row.trim());
+  }
+});
+
 //SUBMIT EDIT NOTE BUTTON
 submitEditNodeButton.addEventListener('click', () => {
   statusFlag = statusFlagConstants.editNodeStarted
@@ -421,12 +449,7 @@ submitEditNodeButton.addEventListener('click', () => {
   setStatusText()
 });
 
-//TEST BUTTON
-testButton.addEventListener('click', () => {
-  //reRender()
-  //console.log(uuidv4())
-  reRender()
-});
+
 
 function openForm() {
   document.getElementById("myForm").style.display = "block";
@@ -441,3 +464,44 @@ function uuidv4() {
     (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
   );
 }
+
+let nodesNumbersMap = new Map()
+let nodesMap = new Map()
+
+function fillNodeAndLinkMaps(){
+  let tempNumber = 0;
+  nodes.forEach(element => {
+    nodesNumbersMap.set(element.id, tempNumber)
+    nodesMap.set(element.id, element)
+    tempNumber++
+  });
+  links.forEach(element=>{
+
+    }
+  )
+  console.log(nodesNumbersMap)
+}
+
+let nodeMatrix = [];
+
+function fillNodeMatrix(){
+  nodeMatrix = []
+  fillNodeAndLinkMaps()
+// Добавляем строки
+  for (let i = 0; i < nodes.length; i++) {
+  const row = [];
+  // Добавляем объекты в строки
+    for (let j = 0; j < nodes.length; j++) {
+        row.push(0);
+    }
+  nodeMatrix.push(row);
+  }
+
+  links.forEach(element=>{
+     let node1 = nodesMap.get(element.source.id)
+     let node2 = nodesMap.get(element.target.id)
+
+     nodeMatrix[nodesNumbersMap.get(node1.id)][nodesNumbersMap.get(node2.id)] = element.value
+  })
+}
+
