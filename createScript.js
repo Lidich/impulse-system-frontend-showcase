@@ -41,7 +41,7 @@ const height = 1080;
 let mouse = null;
 
 // Specify the color scale.
-const color = d3.scaleSequential(d3.interpolatePiYG);
+const color = d3.scaleSequential(d3.interpolateRdYlGn);
 console.log(color)
 
 // The force simulation mutates links and nodes, so create a copy
