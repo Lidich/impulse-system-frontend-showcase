@@ -9,27 +9,44 @@
 <!-- Load d3.js -->
 <script src="d3.v7.js"></script>
 <body>
-    <div id="top-menu">
-        <span style="background-color: red;">status: </span>
-        <span id="status" style="background-color: red;">status</span>
-        <br><br>
-        <button id="addNewNodeButton">
-            add new node
-        </button>
-        <button id="addNewLinkButton">
-            add new link
-        </button>
-        <button id="editNodeButton">
-            edit node
-        </button>
-        <button id="testButton">
-            test button
-        </button>
-        <a href="graphic.html">
-            <button id="goTo">
-                submit built network & create graphic
+    <header>
+        <div id="top-menu">
+            <span style="background-color: red;">status: </span>
+            <span id="status" style="background-color: red;">status</span>
+            <br><br>
+            <button id="addNewNodeButton">
+                add new node
             </button>
-        </a>
+            <button id="addNewLinkButton">
+                add new link
+            </button>
+            <button id="editNodeButton">
+                edit node
+            </button>
+            <button id="testButton">
+                test button
+            </button>
+            <a href="graphic.html">
+                <button id="goTo">
+                    submit built network & create graphic
+                </button>
+            </a>
+        </div>
+    </header>
+    
+    <div class="main">
+        <div id="container"></div>
+
+        <div class="impulseEditor">
+            <button id="impulseSubmitButton">do impulse shenanigans</button>
+            <button id="impulseAddStepButton">add impulse step</button>
+            <button id="impulseRemoveStepButton">remove impulse step</button>
+            <div>
+                <button id="impulseAddNodeButton">add impulse for this node:</button>
+                <select id="nodeForImpulseSelect"></select>
+            </div>
+            <div id="impulseInputContainer"></div>
+        </div>
         
     </div>
     
@@ -48,9 +65,10 @@
           <button type="button" class="btn">Delete</button>
           <button id="editNodeCloseButton" type="button" class="btn cancel">Close</button>
         </form>
-      </div>
+        
+        <div mai></div>
     
-    <div id="container"></div>
+    
     
     <script type="module" src="createScript.js"></script>
 </body>

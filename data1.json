@@ -2,13 +2,11 @@
   "nodes":[
       {
         "id": "90161ae2-f24a-4924-bc41-16a3381f1513",
-        "group": 0.2314123,
         "text": "Napoleon",
         "value": 100
       },
       {
         "id": "bae83dc4-04ac-40fd-9346-1bf81d568a47",
-        "group": 1,
         "text": "Myriel",
         "value": 666
       }

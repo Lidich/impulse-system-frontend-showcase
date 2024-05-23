@@ -1,6 +1,8 @@
 var data = {}
 
-await fetch('./data1.json')
+import { createMatrixInput } from './components.js';
+
+await fetch('./data2.json')
   .then((response) => response.json())
   .then((json) => data = json);
 
@@ -15,6 +17,8 @@ var statusFlagConstants = {
   editNodeStarted: 3
 }
 
+//VARIABLES
+
 var statusText = document.getElementById("status")
 
 var statusFlag = statusFlagConstants.idle;
@@ -23,6 +27,8 @@ var firstNodeForLink = {}
 var secondNodeForLink = {}
 
 var tempNodeForEdit = {}
+
+var impulseSteps = 0
 
 function setStatusText() {
   if (statusFlag == statusFlagConstants.idle) statusText.innerHTML = "idle";
@@ -66,6 +72,7 @@ var simulation = d3.forceSimulation(nodes)
 .force("link", d3.forceLink(links).id(d => d.id).distance(200))
 .force("charge", d3.forceManyBody().strength(-1))
 .force("center", d3.forceCenter(width / 2, height / 2))
+.force("collide", d3.forceCollide().radius(100)) // Добавляем силу коллизии
 .on("tick", ticked);
 
 // Create the SVG container.
@@ -374,6 +381,8 @@ function spawn(source) {
 function reRender() {
   updateMinMaxNodeValue()
 
+  updateSelect()  
+
   updateLineView()
 
   updateNodeView()
@@ -438,12 +447,83 @@ editNodeCloseButton.addEventListener('click', () => {
   document.getElementById("myForm").style.display = "none";
 });
 
+//IMPULSE SUBMIT BUTTON
+impulseSubmitButton.addEventListener('click', () => {
+  let impulses = []
+  /*
+  let count = 0
+  nodes.forEach(element =>{
+    let id = "impulseInput:"+count+"-"+0
+    impulses.push(document.getElementById(id).value)
+    count++
+  })*/
+  let impulseMatrix = []
+// Добавляем строки
+  for (let i = 0; i < nodes.length; i++) {
+  const row = [];
+  // Добавляем объекты в строки
+    for (let j = 0; j < impulseSteps; j++) {
+        let id = "impulseInput:"+i+"-"+j
+        row.push(document.getElementById(id).value);
+    }
+    impulseMatrix.push(row);
+  }
+  console.log(impulseMatrix)
+});
+
+//IMPULSE STEPS ADD BUTTON
+impulseAddStepButton.addEventListener('click', () => {
+  impulseSteps++
+  let rowHeaders = []
+  let columnHeaders = []
+  nodes.forEach(element=>{
+    rowHeaders.push(element.text)
+  })
+  for (let i = 0;i<impulseSteps;i++){
+    columnHeaders.push(i+1)
+  }
+  createMatrixInput("impulse", "impulseInputContainer", nodes.length, impulseSteps, rowHeaders, columnHeaders)
+});
+
+//IMPULSE STEPS ADD BUTTON
+impulseRemoveStepButton.addEventListener('click', () => {
+  if(impulseSteps!=0){
+    impulseSteps--
+    if (impulseSteps==0) {
+      document.getElementById("impulseInputContainer").innerHTML = ""
+      return
+    }
+  let rowHeaders = []
+  let columnHeaders = []
+  nodes.forEach(element=>{
+    rowHeaders.push(element.text)
+  })
+  for (let i = 0;i<impulseSteps;i++){
+    columnHeaders.push(i+1)
+  }
+  createMatrixInput("impulse", "impulseInputContainer", nodes.length, impulseSteps, rowHeaders, columnHeaders)}
+});
+
+//ADD IMPULSE FOR NODE BUTTON
+impulseAddNodeButton.addEventListener('click', () => {
+    let rowId = "impulseRow:";
+    let selectedNode = document.getElementById("nodeForImpulseSelect").value
+    fillNodeAndLinkMaps()
+    rowId+=nodesNumbersMap.get(selectedNode)
+    document.getElementById(rowId).style.display = "block"
+});
+
 //TEST BUTTON
 testButton.addEventListener('click', () => {
-  console.log(maxNodeValue)
-  console.log(minNodeValue)
-
-  reRender()
+  let rowHeaders = []
+  let columnHeaders = []
+  nodes.forEach(element=>{
+    rowHeaders.push(element.text)
+  })
+  for (let i = 0;i<impulseSteps;i++){
+    columnHeaders.push(i+1)
+  }
+  createMatrixInput("impulse", "impulseInputContainer", nodes.length, impulseSteps, rowHeaders, columnHeaders)
 
   for (let i = 0; i < nodeMatrix.length; i++) {
     let row = '';
@@ -523,4 +603,16 @@ function fillNodeMatrix(){
      nodeMatrix[nodesNumbersMap.get(node1.id)][nodesNumbersMap.get(node2.id)] = element.value
   })
 }
+
+function updateSelect(){
+  document.getElementById("nodeForImpulseSelect").innerHTML = ""
+  nodes.forEach(element=>{
+    const opt = document.createElement("option")
+    opt.value = element.id
+    opt.text = element.text
+    document.getElementById("nodeForImpulseSelect").appendChild(opt)
+  })
+}
+
+updateSelect()
 
