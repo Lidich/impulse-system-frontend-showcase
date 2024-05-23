@@ -191,14 +191,6 @@ function updateCirclesValueTextView() {
 // Позиционируем текст посередине каждого ребра
 linkText.attr("x", d => (d.source.x + d.target.x) / 2)
   .attr("y", d => (d.source.y + d.target.y) / 2);
-
-/*
-node.append("title")
-  .text(d => d.id);*/
-
-  function clickedSUCK(){
-    console.log("node clicked")
-  }
   
 // Add a drag behavior.
 node.call(d3.drag()
