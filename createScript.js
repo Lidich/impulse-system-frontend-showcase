@@ -158,14 +158,16 @@ var circlesText = svg.append("g")
   .data(nodes)
   .join("text")
   .attr("class", "circle-text")
-  .text(d => d.text);
+  .text(d => d.text)
+  .on("click", nodeClicked);
 
 function updateCirclesTextView() {
   circlesText = circlesText
   .data(nodes)
   .join("text")
   .attr("class", "circle-text")
-  .text(d => d.text);
+  .text(d => d.text)
+  .on("click", nodeClicked);
 }
 
 // Добавляем группу для текста
@@ -174,14 +176,16 @@ var circlesValueText = svg.append("g")
   .data(nodes)
   .join("text")
   .attr("class", "circle-text")
-  .text(d => "value: "+d.value);
+  .text(d => "value: "+d.value)
+  .on("click", nodeClicked);
 
 function updateCirclesValueTextView() {
   circlesValueText = circlesValueText
   .data(nodes)
   .join("text")
   .attr("class", "circle-text")
-  .text(d => "value: "+d.value);
+  .text(d => "value: "+d.value)
+  .on("click", nodeClicked);
 }
 
 // Позиционируем текст посередине каждого ребра
@@ -192,12 +196,16 @@ linkText.attr("x", d => (d.source.x + d.target.x) / 2)
 node.append("title")
   .text(d => d.id);*/
 
+  function clickedSUCK(){
+    console.log("node clicked")
+  }
   
 // Add a drag behavior.
 node.call(d3.drag()
   .on("start", dragstarted)
   .on("drag", dragged)
   .on("end", dragended))
+  
 
 circlesText.call(d3.drag()
 .on("start", dragstarted)
@@ -233,7 +241,6 @@ function ticked() {
 
 // Reheat the simulation when drag starts, and fix the subject position.
 function dragstarted(event) {
-  console.log(event)
   if (!event.active) simulation.alphaTarget(0.3).restart();
   event.subject.fx = event.subject.x;
   event.subject.fy = event.subject.y;
@@ -241,7 +248,6 @@ function dragstarted(event) {
 
 // Update the subject (dragged node) position during drag.
 function dragged(event) {
-  console.log(event)
   event.subject.fx = event.x;
   event.subject.fy = event.y;
 }
@@ -249,7 +255,6 @@ function dragged(event) {
 // Restore the target alpha so the simulation cools after dragging ends.
 // Unfix the subject position now that it’s no longer being dragged.
 function dragended(event) {
-  console.log(event)
   if (!event.active) simulation.alphaTarget(0);
   event.subject.fx = null;
   event.subject.fy = null;
@@ -351,6 +356,7 @@ function addNewLink() {
 }
 
 function nodeClicked(event) {
+  console.log(event)
   console.log(event.srcElement.__data__)
   console.log((event.srcElement.__data__.value-minNodeValue)/(maxNodeValue-minNodeValue+1))
   if (statusFlag == statusFlagConstants.addLinkStart) {
