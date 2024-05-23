@@ -192,11 +192,22 @@ linkText.attr("x", d => (d.source.x + d.target.x) / 2)
 node.append("title")
   .text(d => d.id);*/
 
+  
 // Add a drag behavior.
 node.call(d3.drag()
   .on("start", dragstarted)
   .on("drag", dragged)
   .on("end", dragended))
+
+circlesText.call(d3.drag()
+.on("start", dragstarted)
+.on("drag", dragged)
+.on("end", dragended))
+
+circlesValueText.call(d3.drag()
+.on("start", dragstarted)
+.on("drag", dragged)
+.on("end", dragended))
 
 // Set the position attributes of links and nodes each time the simulation ticks.
 function ticked() {
@@ -222,6 +233,7 @@ function ticked() {
 
 // Reheat the simulation when drag starts, and fix the subject position.
 function dragstarted(event) {
+  console.log(event)
   if (!event.active) simulation.alphaTarget(0.3).restart();
   event.subject.fx = event.subject.x;
   event.subject.fy = event.subject.y;
@@ -229,6 +241,7 @@ function dragstarted(event) {
 
 // Update the subject (dragged node) position during drag.
 function dragged(event) {
+  console.log(event)
   event.subject.fx = event.x;
   event.subject.fy = event.y;
 }
@@ -236,6 +249,7 @@ function dragged(event) {
 // Restore the target alpha so the simulation cools after dragging ends.
 // Unfix the subject position now that it’s no longer being dragged.
 function dragended(event) {
+  console.log(event)
   if (!event.active) simulation.alphaTarget(0);
   event.subject.fx = null;
   event.subject.fy = null;
@@ -379,6 +393,7 @@ function spawn(source) {
 }
 
 function reRender() {
+  console.log("rerender!!!")
   updateMinMaxNodeValue()
 
   updateSelect()  
@@ -393,11 +408,22 @@ function reRender() {
 
   updateLinkTextView()
 
+  
   // Add a drag behavior.
   node.call(d3.drag()
     .on("start", dragstarted)
     .on("drag", dragged)
     .on("end", dragended))
+
+    circlesText.call(d3.drag()
+.on("start", dragstarted)
+.on("drag", dragged)
+.on("end", dragended))
+
+circlesValueText.call(d3.drag()
+.on("start", dragstarted)
+.on("drag", dragged)
+.on("end", dragended))
 
   simulation.nodes(nodes);
   simulation.force("link").links(links);
