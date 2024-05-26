@@ -2,7 +2,7 @@ var data = {}
 
 import { createMatrixInput } from './components.js';
 
-await fetch('./data2.json')
+await fetch('./data3.json')
   .then((response) => response.json())
   .then((json) => data = json);
 
@@ -471,6 +471,8 @@ editNodeCloseButton.addEventListener('click', () => {
   document.getElementById("myForm").style.display = "none";
 });
 
+var impulseMatrix = []
+
 //IMPULSE SUBMIT BUTTON
 impulseSubmitButton.addEventListener('click', () => {
   let impulses = []
@@ -481,14 +483,16 @@ impulseSubmitButton.addEventListener('click', () => {
     impulses.push(document.getElementById(id).value)
     count++
   })*/
-  let impulseMatrix = []
+  impulseMatrix = []
 // Добавляем строки
   for (let i = 0; i < nodes.length; i++) {
   const row = [];
   // Добавляем объекты в строки
     for (let j = 0; j < impulseSteps; j++) {
         let id = "impulseInput:"+i+"-"+j
-        row.push(document.getElementById(id).value);
+        if(isNaN(parseInt(document.getElementById(id).value))) {row.push(0)}
+        else{
+          row.push(parseInt(document.getElementById(id).value));}
     }
     impulseMatrix.push(row);
   }
@@ -539,6 +543,7 @@ impulseAddNodeButton.addEventListener('click', () => {
 
 //TEST BUTTON
 testButton.addEventListener('click', () => {
+  /*
   let rowHeaders = []
   let columnHeaders = []
   nodes.forEach(element=>{
@@ -556,6 +561,8 @@ testButton.addEventListener('click', () => {
     }
     console.log(row.trim());
   }
+  */
+  doImpulseStep()
 });
 
 //SUBMIT EDIT NOTE BUTTON
@@ -590,22 +597,35 @@ function uuidv4() {
 
 let nodesNumbersMap = new Map()
 let nodesMap = new Map()
+let nodesNumberNodeMap = new Map()
 
 function fillNodeAndLinkMaps(){
   let tempNumber = 0;
   nodes.forEach(element => {
     nodesNumbersMap.set(element.id, tempNumber)
     nodesMap.set(element.id, element)
+    nodesNumberNodeMap.set(tempNumber, element)
     tempNumber++
   });
   links.forEach(element=>{
 
     }
   )
-  console.log(nodesNumbersMap)
+  //console.log(nodesNumbersMap)
 }
 
 let nodeMatrix = [];
+let nodeValuesMatrix = [];
+
+function fillNodeValuesMatrixStart() {
+    fillNodeAndLinkMaps()
+  // Добавляем строки
+    for (let i = 0; i < nodes.length; i++) {
+    const row = [];
+    // Добавляем объекты в строки
+    row.push(nodesNumberNodeMap.get(i).value);
+    nodeValuesMatrix.push(row);
+}}
 
 function fillNodeMatrix(){
   nodeMatrix = []
@@ -640,3 +660,142 @@ function updateSelect(){
 
 updateSelect()
 
+var currImpulseStep = 0;
+var resValues = [];
+
+function doImpulseStep(){
+  
+  fillNodeMatrix()
+  nodeMatrix = transpose(nodeMatrix)
+  //console.log(nodeMatrix)
+  //console.log(impulseMatrix)
+  console.log("nodeValuesMatrix v0:")
+  console.log(nodeValuesMatrix)
+  
+  //console.log(addMatrices(nodeValuesMatrix, getColumnMatrix(impulseMatrix, 0)))
+  if(currImpulseStep==0){
+    fillNodeValuesMatrixStart()
+    resValues = addMatrices(nodeValuesMatrix, getColumnMatrix(impulseMatrix, 0))
+    //console.log("v0+p0")
+    //console.log(addMatrices(nodeValuesMatrix, getColumnMatrix(impulseMatrix, 0)))
+    currImpulseStep++
+  }
+  else{
+    let resColumn = getColumnMatrix(resValues, resValues[0].length-1)
+    for(let i=0;i<currImpulseStep+1;i++){
+      let Apow = matrixPower(nodeMatrix, currImpulseStep-i)
+      console.log(currImpulseStep-i)
+      console.log(Apow)
+      let ApowXimpulse = multiplyMatrices(Apow, getColumnMatrix(impulseMatrix, i))
+      console.log("ApowXimpulse"+i)
+      console.log(ApowXimpulse)
+      resColumn = addMatrices(resColumn, ApowXimpulse)
+    }
+    for(let i=0;i<resValues.length;i++){
+      resValues[i].push(resColumn[i][0])
+    }
+  }
+  console.log("res")
+  console.log(resValues)
+}
+
+function transpose(matrix) {
+  // Получаем количество строк и столбцов в исходной матрице
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+
+  // Создаем новую матрицу с транспонированными размерами
+  const transposedMatrix = [];
+
+  for (let j = 0; j < cols; j++) {
+      // Создаем новую строку для транспонированной матрицы
+      transposedMatrix[j] = [];
+      for (let i = 0; i < rows; i++) {
+          // Заполняем новую строку элементами из столбца исходной матрицы
+          transposedMatrix[j][i] = matrix[i][j];
+      }
+  }
+
+  return transposedMatrix;
+}
+
+function matrixPower(matrix, power) {
+  if (power < 0) {
+      throw new Error("Power should be a non-negative integer.");
+  }
+
+  // Создаем единичную матрицу той же размерности
+  let result = identityMatrix(matrix.length);
+
+  // Умножаем матрицу на себя power раз
+  for (let i = 0; i < power; i++) {
+      result = multiplyMatrices(result, matrix);
+  }
+
+  return result;
+}
+
+function identityMatrix(size) {
+  const identity = [];
+  for (let i = 0; i < size; i++) {
+      identity[i] = [];
+      for (let j = 0; j < size; j++) {
+          identity[i][j] = (i === j) ? 1 : 0;
+      }
+  }
+  return identity;
+}
+
+function multiplyMatrices(A, B) {
+  const rowsA = A.length;
+  const colsA = A[0].length;
+  const rowsB = B.length;
+  const colsB = B[0].length;
+
+  if (colsA !== rowsB) {
+      throw new Error("Number of columns in the first matrix must be equal to the number of rows in the second.");
+  }
+
+  const result = [];
+  for (let i = 0; i < rowsA; i++) {
+      result[i] = [];
+      for (let j = 0; j < colsB; j++) {
+          let sum = 0;
+          for (let k = 0; k < colsA; k++) {
+              sum += A[i][k] * B[k][j];
+          }
+          result[i][j] = sum;
+      }
+  }
+  return result;
+}
+
+function addMatrices(A, B) {
+  const rowsA = A.length;
+  const colsA = A[0].length;
+  const rowsB = B.length;
+  const colsB = B[0].length;
+
+  if (rowsA !== rowsB || colsA !== colsB) {
+      throw new Error("Matrices must have the same dimensions to be added.");
+  }
+
+  const result = [];
+  for (let i = 0; i < rowsA; i++) {
+      result[i] = [];
+      for (let j = 0; j < colsA; j++) {
+          result[i][j] = A[i][j] + B[i][j];
+      }
+  }
+  return result;
+}
+
+function getColumnMatrix(matrix, columnNumber){
+  const result = []
+  for(let i=0;i<matrix.length;i++){
+    let row = []
+    row.push(matrix[i][columnNumber])
+    result.push(row)
+  }
+  return(result)
+}

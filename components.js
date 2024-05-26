@@ -30,7 +30,7 @@ export function createMatrixInput(idPrefix, idContainer, rowCount, columnCount, 
             table.appendChild(row)
             row = document.createElement('tr');
         }
-        row.style.display = "none"
+        row.style.display = "block"
         row.id = `${idPrefix}Row:${i}`;
             firstCellInRow = document.createElement('td')
             firstCellInRow.innerHTML = rowHeaders[i]
