@@ -859,4 +859,5 @@ doImpulseStepButton.addEventListener('click', () => {
 
 submitBuiltNetworkButton.addEventListener('click', ()=>{
   document.getElementById("top-menu").style.visibility = "hidden"
+  document.getElementById("impulseEditor").style.visibility = "visible"
 })

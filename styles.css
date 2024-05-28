@@ -145,3 +145,12 @@ button:active {
 #testButton{
   visibility: hidden;
 }
+
+#impulseEditor{
+  visibility: hidden;
+}
+
+.impulseEditor{
+  visibility: hidden;
+  border: #1f77b4  10px solid;
+}
