@@ -26,28 +26,39 @@
             <button id="testButton">
                 test button
             </button>
-            <a href="graphic.html">
+            <button id="submitBuiltNetworkButton">
+                submit built network
+            </button>
+            <a href="graphic.html" class="goToLink">
                 <button id="goTo">
                     submit built network & create graphic
                 </button>
             </a>
         </div>
     </header>
-    
     <div class="main">
         <div id="container"></div>
-
         <div class="impulseEditor">
-            <button id="impulseSubmitButton">do impulse shenanigans</button>
-            <button id="impulseAddStepButton">add impulse step</button>
-            <button id="impulseRemoveStepButton">remove impulse step</button>
-            <div>
-                <button id="impulseAddNodeButton">add impulse for this node:</button>
-                <select id="nodeForImpulseSelect"></select>
+            <div class="impulseEditor-header">
+                <span>IMPULSE STEPS:</span>
+                <button id="impulseAddStepButton">+</button>
+                <button id="impulseRemoveStepButton">-</button>            
+                <button id="impulseSubmitButton">submit impulse input</button>       
+                <div id="impulseForNodeContainer">
+                    <button id="impulseAddNodeButton">add impulse for this node:</button>
+                    
+                    <br>
+                    <select style="width: 100%;" id="nodeForImpulseSelect"></select>
+                </div>
+                <div id="doImpuleStepContainer">
+                    <button id="doImpulseStepButton">do impulse step</button>
+                    <br>
+                    <span id="impulseStepSpan">current impulse step: 0</span>
+                </div>
+                
             </div>
             <div id="impulseInputContainer"></div>
-        </div>
-        
+        </div>     
     </div>
     
     <!-- The form -->

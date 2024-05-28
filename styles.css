@@ -1,14 +1,23 @@
 #container{
-    width: 50%;
-    height: 50%;
-    margin-left: 25%;
-    margin-top: 3%;
+    width: 77%;
+    height: 77vh;
+    margin-top: 1%;
     border: #1f77b4  10px solid;
     background-color: aliceblue;
+    display: flex;
+    justify-content: center;
+}
+
+svg{
+  border: 1px solid black;
 }
 
 .main{
   display: flex;
+  flex-direction: column;
+  width: 98vw;
+  justify-content: center;
+  align-items: center;
 }
 
 body {
@@ -95,7 +104,44 @@ button:active {
 .impulseEditor{
   margin-top: 55px;
   margin-left: 10px;
-  width: 300px;
+  width: 77%;
   height: 300px;
   background-color: #ddd;
+}
+
+.impulseEditor-header{
+  display: flex;
+  justify-content: space-between;
+}
+
+#doImpulseStepButton{
+  background-color: red;
+}
+
+.activeColumn{
+  background-color: red;
+}
+
+#impulseForNodeContainer{
+  visibility: hidden;
+}
+
+#doImpuleStepContainer{
+  visibility: hidden;
+}
+
+#impulseRemoveStepButton{
+  visibility: hidden;
+}
+
+#impulseSubmitButton{
+  visibility: hidden;
+}
+
+.goToLink{
+  visibility: hidden;
+}
+
+#testButton{
+  visibility: hidden;
 }

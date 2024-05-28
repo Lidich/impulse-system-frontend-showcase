@@ -41,8 +41,8 @@ function setStatusText() {
 setStatusText()
 
 // Specify the dimensions of the chart.
-const width = 1920;
-const height = 1080;
+const width = 600;
+const height = 600;
 
 let mouse = null;
 
@@ -69,10 +69,10 @@ updateMinMaxNodeValue()
 
 // Create a simulation with several forces.
 var simulation = d3.forceSimulation(nodes)
-.force("link", d3.forceLink(links).id(d => d.id).distance(200))
+.force("link", d3.forceLink(links).id(d => d.id).distance(100))
 .force("charge", d3.forceManyBody().strength(-1))
 .force("center", d3.forceCenter(width / 2, height / 2))
-.force("collide", d3.forceCollide().radius(100)) // Добавляем силу коллизии
+.force("collide", d3.forceCollide().radius(50)) // Добавляем силу коллизии
 .on("tick", ticked);
 
 // Create the SVG container.
@@ -80,7 +80,7 @@ var svg = d3.create("svg")
   .attr("width", width)
   .attr("height", height)
   .attr("viewBox", [0, 0, width, height])
-  .attr("style", "max-width: 100%; height: auto;")
+  .attr("style", "max-width: 100%; height: 98%; width: 98%")
   // .on("click", clicked)
   .on("click", svgClicked)
 
@@ -88,10 +88,10 @@ var svg = d3.create("svg")
 svg.append("defs").append("marker")
   .attr("id", "arrowhead")
   .attr("viewBox", "0 0 10 10")
-  .attr("refX", 25) // Убедитесь, что значение refX соответствует длине стрелки
+  .attr("refX", 30) // Убедитесь, что значение refX соответствует длине стрелки
   .attr("refY", 5)
-  .attr("markerWidth", 3)
-  .attr("markerHeight", 3)
+  .attr("markerWidth", 7)
+  .attr("markerHeight", 7)
   .attr("orient", "auto")
   .append("path")
   .attr("d", "M 0 0 L 10 5 L 0 10 Z") // Треугольная стрелка
@@ -104,14 +104,14 @@ var link = svg.append("g")
   .selectAll("line")
   .data(links)
   .join("line")
-  .attr("stroke-width", d => 10 * Math.sqrt(d.value))
+  .attr("stroke-width", 2)
   .attr("marker-end", "url(#arrowhead)"); // Используем маркер стрелки
 
 function updateLineView() {
   link = link
     .data(links)
     .join("line")
-    .attr("stroke-width", d => 10 * Math.sqrt(d.value))
+    .attr("stroke-width", 2)
     .attr("marker-end", "url(#arrowhead)"); // Убедитесь, что маркер стрелки обновляется
 }
 
@@ -121,7 +121,7 @@ var node = svg.append("g")
   .selectAll()
   .data(nodes)
   .join("circle")
-  .attr("r", 50)
+  .attr("r", 25)
   .attr("fill", d => color((d.value-minNodeValue)/(maxNodeValue-minNodeValue+1))).on("click", nodeClicked);
 
   function updateNodeView(){
@@ -129,7 +129,7 @@ var node = svg.append("g")
     .data(nodes)
     .join(
       enter => enter.append("circle").attr("r", 0).attr("fill", d => color((d.value-minNodeValue)/(maxNodeValue-minNodeValue+1))).on("click", nodeClicked)
-        .call(enter => enter.transition().attr("r", 50)),
+        .call(enter => enter.transition().attr("r", 25)),
       update => update.transition() // Добавляем переход для плавного обновления
       .attr("fill", d => color((d.value-minNodeValue)/(maxNodeValue-minNodeValue+1))), // Обновляем цвет для существующих узлов,
       exit => exit.remove()
@@ -142,14 +142,14 @@ var linkText = svg.append("g")
   .data(links)
   .join("text")
   .attr("class", "link-text")
-  .text(d => d.label);
+  .text(d => d.value);
 
   function updateLinkTextView(){
     linkText = linkText
     .data(links)
     .join("text")
     .attr("class", "link-text")
-    .text(d => d.label);
+    .text(d => d.value);
   }
 
 // Добавляем группу для текста
@@ -496,6 +496,13 @@ impulseSubmitButton.addEventListener('click', () => {
     }
     impulseMatrix.push(row);
   }
+  if(impulseSteps>0){
+    document.getElementById("impulseRemoveStepButton").style.visibility = "hidden"
+    document.getElementById("impulseForNodeContainer").style.visibility = "hidden"
+    document.getElementById("impulseSubmitButton").style.visibility = "hidden"
+    document.getElementById("impulseAddStepButton").style.visibility = "hidden"
+    document.getElementById("doImpuleStepContainer").style.visibility = "visible"
+  }
   console.log(impulseMatrix)
 });
 
@@ -511,7 +518,12 @@ impulseAddStepButton.addEventListener('click', () => {
     columnHeaders.push(i+1)
   }
   createMatrixInput("impulse", "impulseInputContainer", nodes.length, impulseSteps, rowHeaders, columnHeaders)
+  document.getElementById("impulseRemoveStepButton").style.visibility = "visible"
+  document.getElementById("impulseForNodeContainer").style.visibility = "visible"
+  document.getElementById("impulseSubmitButton").style.visibility = "visible"
 });
+
+var selectedImpulseNodesIds = []
 
 //IMPULSE STEPS ADD BUTTON
 impulseRemoveStepButton.addEventListener('click', () => {
@@ -519,6 +531,9 @@ impulseRemoveStepButton.addEventListener('click', () => {
     impulseSteps--
     if (impulseSteps==0) {
       document.getElementById("impulseInputContainer").innerHTML = ""
+      document.getElementById("impulseRemoveStepButton").style.visibility = "hidden"
+      document.getElementById("impulseForNodeContainer").style.visibility = "hidden"
+      document.getElementById("impulseSubmitButton").style.visibility = "hidden"
       return
     }
   let rowHeaders = []
@@ -530,6 +545,11 @@ impulseRemoveStepButton.addEventListener('click', () => {
     columnHeaders.push(i+1)
   }
   createMatrixInput("impulse", "impulseInputContainer", nodes.length, impulseSteps, rowHeaders, columnHeaders)}
+  //show selected node rows
+  selectedImpulseNodesIds.forEach(element => {
+    console.log("impulseRow:"+element)
+    document.getElementById("impulseRow:"+element).style.display = "flex"
+  })
 });
 
 //ADD IMPULSE FOR NODE BUTTON
@@ -538,8 +558,13 @@ impulseAddNodeButton.addEventListener('click', () => {
     let selectedNode = document.getElementById("nodeForImpulseSelect").value
     fillNodeAndLinkMaps()
     rowId+=nodesNumbersMap.get(selectedNode)
-    document.getElementById(rowId).style.display = "block"
+    selectedImpulseNodesIds.push(nodesNumbersMap.get(selectedNode))
+    //console.log(nodesNumbersMap.get(selectedNode))
+    console.log(selectedImpulseNodesIds)
+    document.getElementById(rowId).style.display = "flex"
 });
+
+
 
 //TEST BUTTON
 testButton.addEventListener('click', () => {
@@ -562,12 +587,17 @@ testButton.addEventListener('click', () => {
     console.log(row.trim());
   }
   */
-  doImpulseStep()
+  //doImpulseStep()
+  fillNodeAndLinkMaps()
+  for(let i=0;i<resValues.length;i++){
+    nodesNumberNodeMap.get(i).value = resValues[i][0]
+  }
+  reRender()
 });
 
 //SUBMIT EDIT NOTE BUTTON
 submitEditNodeButton.addEventListener('click', () => {
-  statusFlag = statusFlagConstants.editNodeStarted
+  statusFlag = statusFlagConstants.idle
   console.log(nodes)
   nodes.forEach(element => {
     if (element.id == tempNodeForEdit.id) {
@@ -577,6 +607,7 @@ submitEditNodeButton.addEventListener('click', () => {
   });
   reRender()
   setStatusText()
+  document.getElementById("myForm").style.visibility = "hidden"
 });
 
 
@@ -664,9 +695,8 @@ var currImpulseStep = 0;
 var resValues = [];
 
 function doImpulseStep(){
+  if(currImpulseStep==impulseSteps) return
   
-  fillNodeMatrix()
-  nodeMatrix = transpose(nodeMatrix)
   //console.log(nodeMatrix)
   //console.log(impulseMatrix)
   console.log("nodeValuesMatrix v0:")
@@ -674,29 +704,39 @@ function doImpulseStep(){
   
   //console.log(addMatrices(nodeValuesMatrix, getColumnMatrix(impulseMatrix, 0)))
   if(currImpulseStep==0){
+    fillNodeMatrix()
+    nodeMatrix = transpose(nodeMatrix)
     fillNodeValuesMatrixStart()
     resValues = addMatrices(nodeValuesMatrix, getColumnMatrix(impulseMatrix, 0))
     //console.log("v0+p0")
     //console.log(addMatrices(nodeValuesMatrix, getColumnMatrix(impulseMatrix, 0)))
     currImpulseStep++
+    return
   }
   else{
     let resColumn = getColumnMatrix(resValues, resValues[0].length-1)
     for(let i=0;i<currImpulseStep+1;i++){
       let Apow = matrixPower(nodeMatrix, currImpulseStep-i)
       console.log(currImpulseStep-i)
-      console.log(Apow)
+      console.log(Apow+"i")
       let ApowXimpulse = multiplyMatrices(Apow, getColumnMatrix(impulseMatrix, i))
       console.log("ApowXimpulse"+i)
       console.log(ApowXimpulse)
       resColumn = addMatrices(resColumn, ApowXimpulse)
+      console.log("resColumn")
+      console.log(resColumn)
     }
     for(let i=0;i<resValues.length;i++){
       resValues[i].push(resColumn[i][0])
     }
+    currImpulseStep++
   }
   console.log("res")
   console.log(resValues)
+  for(let i=0;i<resValues.length;i++){
+    nodesNumberNodeMap.get(i).value = resValues[i][currImpulseStep-1]
+  }
+  reRender()
 }
 
 function transpose(matrix) {
@@ -799,3 +839,24 @@ function getColumnMatrix(matrix, columnNumber){
   }
   return(result)
 }
+
+doImpulseStepButton.addEventListener('click', () => {
+    if(currImpulseStep==impulseSteps) return
+    doImpulseStep();
+    const elements = document.querySelectorAll(".impulseColumn-"+currImpulseStep);
+    if(currImpulseStep!=0){
+      const elementsActive = document.querySelectorAll(".activeColumn");
+      elementsActive.forEach(element => {
+        element.className= "impulseColumn-"+currImpulseStep-1
+      });
+    }
+    // Перебираем все элементы и изменяем их стиль
+    elements.forEach(element => {
+      element.className+= " activeColumn"
+    });
+    document.getElementById("impulseStepSpan").innerHTML = currImpulseStep
+});
+
+submitBuiltNetworkButton.addEventListener('click', ()=>{
+  document.getElementById("top-menu").style.visibility = "hidden"
+})
