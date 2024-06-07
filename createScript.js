@@ -1,10 +1,35 @@
 var data = {}
 
-import { createMatrixInput } from './components.js';
+import { createChart, createMatrixInput } from './components.js';
 
 await fetch('./data3.json')
   .then((response) => response.json())
   .then((json) => data = json);
+
+  //aapl = FileAttachment("aapl.csv").csv({typed: true})
+
+  async function loadFile(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Failed to load ${url}`);
+    return await response.text();
+}
+
+function autoType(row) {
+  for (const key in row) {
+      const value = row[key];
+      if (!isNaN(value)) {
+          row[key] = +value; // Преобразуем в число
+      } else if (Date.parse(value)) {
+          row[key] = new Date(value); // Преобразуем в дату
+      }
+  }
+  return row;
+}
+
+const chartDataNotParsed = await loadFile('./aapl.csv');
+
+// Парсинг данных, если это CSV
+const chartData = d3.csvParse(chartDataNotParsed, autoType);
 
 //console.log(data)
 
@@ -588,11 +613,14 @@ testButton.addEventListener('click', () => {
   }
   */
   //doImpulseStep()
-  fillNodeAndLinkMaps()
+  //fillNodeAndLinkMaps()
+  /*
   for(let i=0;i<resValues.length;i++){
     nodesNumberNodeMap.get(i).value = resValues[i][0]
   }
-  reRender()
+  reRender()*/
+  console.log(resValues)
+  createChart("impulseChartContainer", resValues)
 });
 
 //SUBMIT EDIT NOTE BUTTON
@@ -855,9 +883,11 @@ doImpulseStepButton.addEventListener('click', () => {
       element.className+= " activeColumn"
     });
     document.getElementById("impulseStepSpan").innerHTML = currImpulseStep
+    createChart("impulseChartContainer", resValues)
 });
 
 submitBuiltNetworkButton.addEventListener('click', ()=>{
   document.getElementById("top-menu").style.visibility = "hidden"
   document.getElementById("impulseEditor").style.visibility = "visible"
 })
+
