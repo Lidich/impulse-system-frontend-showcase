@@ -14,7 +14,7 @@
     margin-top: 1%;
     border: #1f77b4  10px solid;
     background-color: aliceblue;
-    display: flex;
+    display: none;
     justify-content: center;
 }
 
@@ -117,6 +117,7 @@ button:active {
   width: 77%;
   height: 300px;
   background-color: #ddd;
+  display: none;
 }
 
 .impulseEditor-header{
@@ -153,7 +154,11 @@ button:active {
 }
 
 #testButton{
-  visibility: visible;
+  visibility: hidden;
+}
+
+#returnEditNetworkButton{
+  visibility: hidden;
 }
 
 #impulseEditor{

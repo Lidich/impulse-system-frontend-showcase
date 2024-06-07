@@ -77,7 +77,7 @@ export function createMatrixInput(idPrefix, idContainer, rowCount, columnCount, 
     
         const margin = { top: 20, right: 30, bottom: 30, left: 40 },
               width = 800 - margin.left - margin.right,
-              height = 400 - margin.top - margin.bottom;
+              height = 800 - margin.top - margin.bottom;
     
         
 // Create the SVG container.
@@ -93,7 +93,7 @@ var svg = d3.create("svg")
 
 var svg = d3.create("svg")
     .attr("width", "95%") // Ширина svg контейнера
-    .attr("height", "90%") // Высота svg контейнера
+    .attr("height", "95%") // Высота svg контейнера
     .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
     .attr("preserveAspectRatio", "xMidYMid meet") // Позволяет сохранить пропорции и центрировать содержимое
     .style("max-width", "100%") // Максимальная ширина

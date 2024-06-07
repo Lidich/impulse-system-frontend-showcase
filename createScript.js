@@ -39,7 +39,8 @@ var statusFlagConstants = {
   addNodeStart: 1,
   addLinkStart: 2,
   addLinkFirstSelected: 21,
-  editNodeStarted: 3
+  editNodeStarted: 3,
+  impulseEditing: 4
 }
 
 //VARIABLES
@@ -61,6 +62,7 @@ function setStatusText() {
   if (statusFlag == statusFlagConstants.addLinkStart) statusText.innerHTML = "Добавление нового ребра. Выберите любую из вершин для присоединения начала ребра";
   if (statusFlag == statusFlagConstants.addLinkFirstSelected) statusText.innerHTML = "Добавление нового ребра. Выберите любую из вершин для присоединения конца ребра";
   if (statusFlag == statusFlagConstants.editNodeStarted) statusText.innerHTML = "Изменение вершины. Выберите вершину, которую хотите отредактировать";
+  if (statusFlag == statusFlagConstants.impulseEditing) statusText.innerHTML = "Работа с импульсами";
 }
 
 setStatusText()
@@ -135,9 +137,17 @@ var link = svg.append("g")
 function updateLineView() {
   link = link
     .data(links)
-    .join("line")
-    .attr("stroke-width", 2)
-    .attr("marker-end", "url(#arrowhead)"); // Убедитесь, что маркер стрелки обновляется
+    .join(
+      enter => enter.append("line")
+                    .attr("stroke-width", 2)
+                    .attr("marker-end", "url(#arrowhead)"), // Инициализация новых элементов
+      update => update.attr("stroke-width", 2)
+                      .attr("marker-end", "url(#arrowhead)"), // Обновление существующих элементов
+      exit => exit.remove() // Удаление вышедших элементов
+  );
+    //.join("line")
+    //.attr("stroke-width", 2)
+    //.attr("marker-end", "url(#arrowhead)"); // Убедитесь, что маркер стрелки обновляется
 }
 
 var node = svg.append("g")
@@ -372,6 +382,28 @@ function addNewLink() {
   reRender()
 }
 
+deleteNodeButton.addEventListener('click', () => {
+  nodes = nodes.filter(node => node.id !== tempNodeForEdit.id);
+  console.log("links before")
+  console.log(links)
+  links = links.filter(link => (link.source.id !== tempNodeForEdit.id) && (link.target.id !== tempNodeForEdit.id));
+  console.log("links after")
+  console.log(links)
+  /*
+  nodes.forEach(element =>{
+    if(element.id == tempNodeForEdit.id) nodes.remove(element)
+  })
+  links.forEach(
+    element =>{
+      if((element.target == tempNodeForEdit.id)||(element.source == tempNodeForEdit.id)) links.remove(element)
+    }
+  )*/
+  statusFlag = statusFlagConstants.idle
+  setStatusText
+  document.getElementById("myForm").style.display = "none"
+  reRender()
+})
+
 function nodeClicked(event) {
   console.log(event)
   console.log(event.srcElement.__data__)
@@ -527,7 +559,9 @@ impulseSubmitButton.addEventListener('click', () => {
     document.getElementById("impulseSubmitButton").style.visibility = "hidden"
     document.getElementById("impulseAddStepButton").style.visibility = "hidden"
     document.getElementById("doImpuleStepContainer").style.visibility = "visible"
+    document.getElementById("doImpulseStepButton").style.visibility = "visible"
   }
+  
   console.log(impulseMatrix)
 });
 
@@ -550,7 +584,7 @@ impulseAddStepButton.addEventListener('click', () => {
 
 var selectedImpulseNodesIds = []
 
-//IMPULSE STEPS ADD BUTTON
+//IMPULSE STEPS REMOVE BUTTON
 impulseRemoveStepButton.addEventListener('click', () => {
   if(impulseSteps!=0){
     impulseSteps--
@@ -591,6 +625,8 @@ impulseAddNodeButton.addEventListener('click', () => {
 
 
 
+
+
 //TEST BUTTON
 testButton.addEventListener('click', () => {
   /*
@@ -623,14 +659,14 @@ testButton.addEventListener('click', () => {
   createChart("impulseChartContainer", resValues)
 });
 
-//SUBMIT EDIT NOTE BUTTON
+//SUBMIT EDIT NODE BUTTON
 submitEditNodeButton.addEventListener('click', () => {
   statusFlag = statusFlagConstants.idle
   console.log(nodes)
   nodes.forEach(element => {
     if (element.id == tempNodeForEdit.id) {
       element.text = document.getElementById("editNodeNameInput").value
-      element.value = document.getElementById("editNodeValueInput").value
+      element.value = parseInt(document.getElementById("editNodeValueInput").value)
     }
   });
   reRender()
@@ -677,6 +713,7 @@ let nodeMatrix = [];
 let nodeValuesMatrix = [];
 
 function fillNodeValuesMatrixStart() {
+    nodeValuesMatrix = []
     fillNodeAndLinkMaps()
   // Добавляем строки
     for (let i = 0; i < nodes.length; i++) {
@@ -758,6 +795,7 @@ function doImpulseStep(){
       resValues[i].push(resColumn[i][0])
     }
     currImpulseStep++
+    document.getElementById("impulseChartContainer").style.display = "block"
   }
   console.log("res")
   console.log(resValues)
@@ -868,6 +906,7 @@ function getColumnMatrix(matrix, columnNumber){
   return(result)
 }
 
+//DO IMPULSE STEP BUTTON
 doImpulseStepButton.addEventListener('click', () => {
     if(currImpulseStep==impulseSteps) return
     doImpulseStep();
@@ -883,11 +922,47 @@ doImpulseStepButton.addEventListener('click', () => {
       element.className+= " activeColumn"
     });
     document.getElementById("impulseStepSpan").innerHTML = currImpulseStep
+    document.getElementById("impulseChartContainer").style.display = "flex"
     createChart("impulseChartContainer", resValues)
 });
-
+//SUBMIT EDIT NETWORK BUTTON
 submitBuiltNetworkButton.addEventListener('click', ()=>{
-  document.getElementById("top-menu").style.visibility = "hidden"
+  statusFlag=statusFlagConstants.impulseEditing
+  setStatusText()
+  document.getElementById("impulseEditor").style.display = "block"
+  
+  document.getElementById("network-edit-menu").style.visibility = "hidden"
   document.getElementById("impulseEditor").style.visibility = "visible"
+  document.getElementById("returnEditNetworkButton").style.visibility = "visible"
+  
+  resetImpulseEditing()
 })
+
+returnEditNetworkButton.addEventListener('click', ()=>{
+  statusFlag=statusFlagConstants.idle
+  setStatusText()
+  document.getElementById("impulseEditor").style.display = "none"
+  document.getElementById("impulseChartContainer").style.display = "none"
+  document.getElementById("network-edit-menu").style.visibility = "visible"
+  document.getElementById("impulseEditor").style.visibility = "hidden"
+  document.getElementById("returnEditNetworkButton").style.visibility = "hidden"
+  impulseSteps = 0;
+  currImpulseStep = 0;
+})
+
+function resetImpulseEditing(){
+  impulseSteps = 0;
+  currImpulseStep = 0;
+
+    document.getElementById("impulseInputContainer").innerHTML = ""
+    document.getElementById("impulseRemoveStepButton").style.visibility = "hidden"
+    document.getElementById("impulseForNodeContainer").style.visibility = "hidden"
+    document.getElementById("impulseSubmitButton").style.visibility = "hidden"
+    document.getElementById("impulseAddStepButton").style.visibility = "visible"
+    document.getElementById("doImpulseStepButton").style.visibility = "hidden"
+    document.getElementById("impulseStepSpan").innerHTML = "current impulse step: 0"
+    document.getElementById("impulseInputContainer").innerHTML = ""
+    document.getElementById("impulseChartContainer").style.display = "none"
+    document.getElementById("impulseStepSpan").innerHTML = ""
+}
 

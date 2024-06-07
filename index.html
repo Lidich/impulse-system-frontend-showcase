@@ -14,24 +14,27 @@
             <span style="background-color: red;">status: </span>
             <span id="status" style="background-color: red;">status</span>
             <br><br>
-            <button id="addNewNodeButton">
-                add new node
-            </button>
-            <button id="addNewLinkButton">
-                add new link
-            </button>
-            <button id="editNodeButton">
-                edit node
-            </button>
-            
-            <button id="submitBuiltNetworkButton">
-                submit built network
-            </button>
-            <a href="graphic.html" class="goToLink">
-                <button id="goTo">
-                    submit built network & create graphic
+            <button id="returnEditNetworkButton">return to "edit network" mode</button>
+            <div id="network-edit-menu">
+                <button id="addNewNodeButton">
+                    add new node
                 </button>
-            </a>
+                <button id="addNewLinkButton">
+                    add new link
+                </button>
+                <button id="editNodeButton">
+                    edit node
+                </button>
+                
+                <button id="submitBuiltNetworkButton">
+                    submit built network
+                </button>
+                <a href="graphic.html" class="goToLink">
+                    <button id="goTo">
+                        submit built network & create graphic
+                    </button>
+                </a>
+            </div>
         </div>
     </header>
     <div class="main">
@@ -56,7 +59,6 @@
                     <br>
                     <span id="impulseStepSpan">current impulse step: 0</span>
                 </div>
-                
             </div>
             <div id="impulseInputContainer"></div>  
         </div>     
@@ -75,7 +77,7 @@
           <input id="editNodeValueInput" type="number" placeholder="Enter node value" name="nodeValue" required>
       
           <button id="submitEditNodeButton" type="button" class="btn">Submit</button>
-          <button type="button" class="btn">Delete</button>
+          <button id="deleteNodeButton" type="button" class="btn">Delete</button>
           <button id="editNodeCloseButton" type="button" class="btn cancel">Close</button>
         </form>
         
