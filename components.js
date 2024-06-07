@@ -76,8 +76,8 @@ export function createMatrixInput(idPrefix, idContainer, rowCount, columnCount, 
         container.innerHTML = '';
     
         const margin = { top: 20, right: 30, bottom: 30, left: 40 },
-              width = 800 - margin.left - margin.right,
-              height = 800 - margin.top - margin.bottom;
+              width = 600 - margin.left - margin.right,
+              height = 400 - margin.top - margin.bottom;
     
         
 // Create the SVG container.
