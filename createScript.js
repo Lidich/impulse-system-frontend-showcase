@@ -635,7 +635,7 @@ submitEditNodeButton.addEventListener('click', () => {
   });
   reRender()
   setStatusText()
-  document.getElementById("myForm").style.visibility = "hidden"
+  document.getElementById("myForm").style.display = "none"
 });
 
 
