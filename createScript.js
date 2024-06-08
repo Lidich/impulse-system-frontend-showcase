@@ -760,7 +760,7 @@ var currImpulseStep = 0;
 var resValues = [];
 
 function doImpulseStep(){
-  if(currImpulseStep==impulseSteps) return
+  if(currImpulseStep==impulseSteps+1) return
   
   //console.log(nodeMatrix)
   //console.log(impulseMatrix)
@@ -784,7 +784,17 @@ function doImpulseStep(){
       let Apow = matrixPower(nodeMatrix, currImpulseStep-i)
       console.log(currImpulseStep-i)
       console.log(Apow+"i")
-      let ApowXimpulse = multiplyMatrices(Apow, getColumnMatrix(impulseMatrix, i))
+      let ApowXimpulse = []
+      if(currImpulseStep==impulseSteps){
+        ApowXimpulse = multiplyMatrices(Apow, getColumnMatrix(impulseMatrix, i-1))
+        for(let k=0;k<ApowXimpulse.length;k++){
+          ApowXimpulse[k][0]=0;
+        }
+      }
+      else{
+        ApowXimpulse = multiplyMatrices(Apow, getColumnMatrix(impulseMatrix, i))
+      }
+      
       console.log("ApowXimpulse"+i)
       console.log(ApowXimpulse)
       resColumn = addMatrices(resColumn, ApowXimpulse)
@@ -908,7 +918,10 @@ function getColumnMatrix(matrix, columnNumber){
 
 //DO IMPULSE STEP BUTTON
 doImpulseStepButton.addEventListener('click', () => {
-    if(currImpulseStep==impulseSteps) return
+    if(currImpulseStep==impulseSteps) {
+      document.getElementById("impulseStepSpan").innerHTML = "all impulses are applied"
+      return
+    }
     doImpulseStep();
     const elements = document.querySelectorAll(".impulseColumn-"+currImpulseStep);
     if(currImpulseStep!=0){
@@ -921,7 +934,7 @@ doImpulseStepButton.addEventListener('click', () => {
     elements.forEach(element => {
       element.className+= " activeColumn"
     });
-    document.getElementById("impulseStepSpan").innerHTML = currImpulseStep
+    document.getElementById("impulseStepSpan").innerHTML = "current impulse step: " + currImpulseStep
     document.getElementById("impulseChartContainer").style.display = "flex"
     createChart("impulseChartContainer", resValues)
 });
