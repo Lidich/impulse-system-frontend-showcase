@@ -1,45 +1,151 @@
 {
   "nodes": [
-    {"id": "1", "text": "Качество персонала", "value": 90},
-    {"id": "2", "text": "Качество оборудования", "value": 85},
-    {"id": "3", "text": "Уровень зарплат", "value": 70},
-    {"id": "4", "text": "Сырьё", "value": 95},
-    {"id": "5", "text": "Производственные мощности", "value": 80},
-    {"id": "6", "text": "Технологические процессы", "value": 88},
-    {"id": "7", "text": "Контроль качества", "value": 92},
-    {"id": "8", "text": "Складские запасы", "value": 75},
-    {"id": "9", "text": "Логистика", "value": 77},
-    {"id": "10", "text": "Маркетинг", "value": 65},
-    {"id": "11", "text": "Бюджет", "value": 80},
-    {"id": "12", "text": "Обучение персонала", "value": 85},
-    {"id": "13", "text": "Исследования и разработки", "value": 90},
-    {"id": "14", "text": "Инновации", "value": 88},
-    {"id": "15", "text": "Обслуживание оборудования", "value": 82},
-    {"id": "16", "text": "Производственный план", "value": 78},
-    {"id": "17", "text": "Законодательные требования", "value": 68},
-    {"id": "18", "text": "Экологические нормы", "value": 72},
-    {"id": "19", "text": "Репутация бренда", "value": 90},
-    {"id": "20", "text": "Удовлетворенность клиентов", "value": 85}
+    {
+      "id": "cb3d7391-00b7-439f-8f4a-e43d94fd8102",
+      "group": 1,
+      "text": "Уровень загрязнения",
+      "x": 248.99460174900955,
+      "y": 300.0917528944143,
+      "value": 100,
+      "index": 0,
+      "vy": -7.182718848990407e-7,
+      "vx": 1.0429152781731763e-7,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "f1301f58-1672-42b0-acf9-11a98be598c9",
+      "group": 1,
+      "text": "ЧС",
+      "x": 326.5878209182086,
+      "y": 363.31776491213265,
+      "value": 100,
+      "index": 1,
+      "vy": -8.37999898761798e-7,
+      "vx": 5.467987176484188e-7,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "98e7a6b2-8b42-4ed5-b629-09783d621c4b",
+      "group": 1,
+      "text": "Доп. Эмиссия",
+      "x": 420.21496807779334,
+      "y": 327.97369457284714,
+      "value": 100,
+      "index": 2,
+      "vy": -8.30499403203853e-7,
+      "vx": 6.513884488432619e-7,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "93cf2604-a3f1-4906-9cfc-f69f9f3cf5ab",
+      "group": 1,
+      "text": "Отравляющие вещества",
+      "x": 342.69308034709917,
+      "y": 264.623182392482,
+      "value": 100,
+      "index": 3,
+      "vy": -7.354247005175836e-7,
+      "vx": 0.0000011753895184123112,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "fbd3cd50-0a9f-4702-9a92-b0ca5537923c",
+      "group": 1,
+      "text": "Кол-во авто",
+      "x": 158.39749214049868,
+      "y": 257.5476744353247,
+      "value": 100,
+      "index": 4,
+      "vy": -0.000001760841936618364,
+      "vx": 4.606228475450042e-7,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "fa2d174d-40ce-4d9d-9b6d-198f070bd7a9",
+      "group": 1,
+      "text": "Качество жизни",
+      "x": 166.80158088688057,
+      "y": 357.2096683890025,
+      "value": 30,
+      "index": 5,
+      "vy": -0.000001998325709584667,
+      "vx": -9.029199035987766e-7,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "e90bdaef-1fcf-49fa-bdd3-cb4766ed4e21",
+      "group": 1,
+      "text": "Цена квоты",
+      "x": 436.3104592025906,
+      "y": 229.23625508521252,
+      "value": 30,
+      "index": 6,
+      "vy": -4.3722048960007617e-7,
+      "vx": 0.0000012865095452920795,
+      "fx": null,
+      "fy": null
+    }
   ],
   "links": [
-    {"source": "1", "target": "6", "value": 1, "label": ""},
-    {"source": "2", "target": "6", "value": 1, "label": ""},
-    {"source": "3", "target": "1", "value": 1, "label": ""},
-    {"source": "4", "target": "5", "value": 1, "label": ""},
-    {"source": "5", "target": "6", "value": 1, "label": ""},
-    {"source": "6", "target": "7", "value": 1, "label": ""},
-    {"source": "7", "target": "20", "value": 1, "label": ""},
-    {"source": "8", "target": "9", "value": 1, "label": ""},
-    {"source": "9", "target": "10", "value": 1, "label": ""},
-    {"source": "10", "target": "19", "value": 1, "label": ""},
-    {"source": "11", "target": "3", "value": 1, "label": ""},
-    {"source": "12", "target": "1", "value": 1, "label": ""},
-    {"source": "13", "target": "14", "value": 1, "label": ""},
-    {"source": "14", "target": "6", "value": 1, "label": ""},
-    {"source": "15", "target": "2", "value": 1, "label": ""},
-    {"source": "16", "target": "5", "value": 1, "label": ""},
-    {"source": "17", "target": "5", "value": -1, "label": ""},
-    {"source": "18", "target": "5", "value": -1, "label": ""},
-    {"source": "19", "target": "20", "value": 1, "label": ""}
+    {
+      "source": "e90bdaef-1fcf-49fa-bdd3-cb4766ed4e21",
+      "target": "93cf2604-a3f1-4906-9cfc-f69f9f3cf5ab",
+      "value": 1,
+      "label": "1"
+    },
+    {
+      "source": "98e7a6b2-8b42-4ed5-b629-09783d621c4b",
+      "target": "e90bdaef-1fcf-49fa-bdd3-cb4766ed4e21",
+      "value": "-1",
+      "label": "1"
+    },
+    {
+      "source": "f1301f58-1672-42b0-acf9-11a98be598c9",
+      "target": "98e7a6b2-8b42-4ed5-b629-09783d621c4b",
+      "value": "-1",
+      "label": "1"
+    },
+    {
+      "source": "cb3d7391-00b7-439f-8f4a-e43d94fd8102",
+      "target": "f1301f58-1672-42b0-acf9-11a98be598c9",
+      "value": 1,
+      "label": "1"
+    },
+    {
+      "source": "cb3d7391-00b7-439f-8f4a-e43d94fd8102",
+      "target": "fa2d174d-40ce-4d9d-9b6d-198f070bd7a9",
+      "value": "-1",
+      "label": "1"
+    },
+    {
+      "source": "fbd3cd50-0a9f-4702-9a92-b0ca5537923c",
+      "target": "fa2d174d-40ce-4d9d-9b6d-198f070bd7a9",
+      "value": 1,
+      "label": "1"
+    },
+    {
+      "source": "fbd3cd50-0a9f-4702-9a92-b0ca5537923c",
+      "target": "cb3d7391-00b7-439f-8f4a-e43d94fd8102",
+      "value": 1,
+      "label": "1"
+    },
+    {
+      "source": "98e7a6b2-8b42-4ed5-b629-09783d621c4b",
+      "target": "93cf2604-a3f1-4906-9cfc-f69f9f3cf5ab",
+      "value": 1,
+      "label": "1"
+    },
+    {
+      "source": "93cf2604-a3f1-4906-9cfc-f69f9f3cf5ab",
+      "target": "cb3d7391-00b7-439f-8f4a-e43d94fd8102",
+      "value": 1,
+      "label": "1"
+    }
   ]
 }

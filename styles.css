@@ -1,33 +1,32 @@
 #container{
-    width: 50%;
-    height: 800px;
-    border: #1f77b4  10px solid;
-    background-color: aliceblue;
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    top: 110px; left: 5px;
+  width: 96%;
+  height: 83%;
+  border: #1f77b4  10px solid;
+  background-color: #ddd;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 12%; left: 1%;
 }
 
 #impulseChartContainer{
-  width: 1000px;
-    height: 450px;
-    border: #1f77b4  10px solid;
-    background-color: aliceblue;
-    display: none;
-    justify-content: center;
-    position: absolute;
-    top: 110px; left: 1090px;
+  width: 35%;
+  height: 48%;
+  border: #1f77b4  10px solid;
+  background-color: #ddd;
+  display: none;
+  justify-content: center;
+  position: absolute;
+  top: 12%; left: 62%;
 }
 
 .impulseEditor{
-  width: 1000px;
-  height: 350px;
+  width: 35%;
+  height: 35%;
   background-color: #ddd;
   display: none;
-
   position: absolute;
-  top: 560px; left: 1090px;
+  top: 60%; left: 62%;
 }
 
 svg{
@@ -45,18 +44,87 @@ svg{
 body {
   caret-color: transparent;
   user-select: none;
-  font-family: "Comic Sans MS", cursive, sans-serif;
+  /*font-family: "Comic Sans MS", cursive, sans-serif;*/
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
   background-color: black;
-  
+  font-weight: bold;
 }
 
 #top-menu{
-    width: 98%;
-    height: 77px;
-    background-color: aliceblue;
-    border: #1f77b4  4px solid;
-    position: fixed;
-    opacity: 0.9;
+  width: 98%;
+  height: 8%;
+  background-color: aliceblue;
+  border: #1f77b4  2px solid;
+  position: fixed;
+  opacity: 0.9;
+  display: flex;
+  justify-content: space-between;
+}
+
+#top-menu button, input, select{
+  align-self: center;
+}
+
+#network-edit-menu{
+  display: flex;
+}
+
+#userTopMenu{
+  display: flex;
+  width: 55%;
+  justify-content: space-evenly;
+}
+
+#networkNameInput{
+  height: 33%;
+}
+
+#network-edit-menu{
+  display: flex;
+}
+
+#statusContainer{
+  align-self: center;
+  width: 22%;
+}
+
+#networkNameInputContainer{
+  align-self: center;
+}
+
+#userTopMenuSelect{
+  flex-wrap: wrap;
+}
+
+#userTopMenuSelect button, select{
+  width: 100%;
+}
+
+#userTopMenuSave{
+  flex-wrap: wrap;
+  width: 48%;
+  justify-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+#networkNameInputContainer{
+  flex-wrap: wrap;
+  justify-items: center;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+#userTopMenuSave button, label, input{
+  width: 100%;
+  text-align: center;
+}
+
+#userTopMenuSave input{
+  width: 98%;
+  text-align: center;
 }
 
 /* Button used to open the contact form - fixed at the bottom of the page */
@@ -75,12 +143,12 @@ body {
 
 /* The popup form - hidden by default */
 .form-popup {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  right: 15px;
+  position: absolute;
+  width: 300px;
+  height: 450px;
+  top:35%;
+  left:45%;
   border: 3px solid #f1f1f1;
-  z-index: 9;
 }
 
 /* Add styles to the form container */
@@ -88,11 +156,12 @@ body {
   max-width: 300px;
   padding: 10px;
   background-color: white;
+  height: 96%;
 }
 
 /* Full-width input fields */
 .form-container input[type=text], .form-container input[type=password] {
-  width: 100%;
+  width: 90%;
   padding: 15px;
   margin: 5px 0 22px 0;
   border: none;
@@ -107,8 +176,8 @@ body {
 
 button {
   display: inline-block;
-  padding: 10px 20px;
-  font-size: 12px;
+  padding: 5px 10px;
+  font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
   color: #fff;
@@ -131,7 +200,9 @@ button:active {
 
 .impulseEditor-header{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  align-content: center;
+  align-items: center;
 }
 
 #doImpulseStepButton{
@@ -143,7 +214,12 @@ button:active {
 }
 
 #impulseForNodeContainer{
+  margin-top: 3px;
   visibility: hidden;
+}
+
+#impulseAddNodeButton{
+  width: 100%;
 }
 
 #doImpuleStepContainer{
@@ -166,10 +242,6 @@ button:active {
   visibility: hidden;
 }
 
-#returnEditNetworkButton{
-  visibility: hidden;
-}
-
 #impulseEditor{
   visibility: hidden;
 }
@@ -178,3 +250,39 @@ button:active {
   visibility: hidden;
   border: #1f77b4  10px solid;
 }
+
+#LoginForm{
+  display: none;
+}
+
+#RegisterForm{
+  display: none;
+}
+
+#myForm{
+  display: none;
+  background-color: #f1f1f1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 12px;
+  text-align: left;
+}
+th, td {
+  /*padding: 12px 15px;*/
+  border: 1px solid #ddd;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+tr:hover {
+  background-color: #f1f1f1;
+}
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+
