@@ -2,7 +2,7 @@ var data = {}
 
 import { createChart, createMatrixInput } from './components.js';
 
-await fetch('./data3.json')
+await fetch('./data2.json')
   .then((response) => response.json())
   .then((json) => data = json);
 
@@ -26,10 +26,10 @@ function autoType(row) {
   return row;
 }
 
-const chartDataNotParsed = await loadFile('./aapl.csv');
+//const chartDataNotParsed = await loadFile('./aapl.csv');
 
 // Парсинг данных, если это CSV
-const chartData = d3.csvParse(chartDataNotParsed, autoType);
+//const chartData = d3.csvParse(chartDataNotParsed, autoType);
 
 //console.log(data)
 

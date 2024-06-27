@@ -79,17 +79,6 @@ export function createMatrixInput(idPrefix, idContainer, rowCount, columnCount, 
               width = 600 - margin.left - margin.right,
               height = 400 - margin.top - margin.bottom;
     
-        
-// Create the SVG container.
-/*
-var svg = d3.create("svg")
-.attr("width", width)
-.attr("height", height)
-.attr("viewBox", [0, 0, width, height])
-.attr("style", "max-width: 95%; height: 90%; width: 90%")
-*/
-
-
 
 var svg = d3.create("svg")
     .attr("width", "95%") // Ширина svg контейнера
