@@ -102,13 +102,13 @@
     {
       "source": "98e7a6b2-8b42-4ed5-b629-09783d621c4b",
       "target": "e90bdaef-1fcf-49fa-bdd3-cb4766ed4e21",
-      "value": "-1",
+      "value": -1,
       "label": "1"
     },
     {
       "source": "f1301f58-1672-42b0-acf9-11a98be598c9",
       "target": "98e7a6b2-8b42-4ed5-b629-09783d621c4b",
-      "value": "-1",
+      "value": -1,
       "label": "1"
     },
     {
@@ -120,7 +120,7 @@
     {
       "source": "cb3d7391-00b7-439f-8f4a-e43d94fd8102",
       "target": "fa2d174d-40ce-4d9d-9b6d-198f070bd7a9",
-      "value": "-1",
+      "value": -1,
       "label": "1"
     },
     {

@@ -43,8 +43,12 @@
             </a>
         </div>
         <div id="userTopMenu">
-            <button id="loginButton">войти</button>
-            <button id="registerButton">зарегистрироваться</button>
+            <button id="loginButton" style="visibility: hidden;">войти</button>
+            <button id="registerButton" style="visibility: hidden;">зарегистрироваться</button>
+            <button id="load_button">загрузить из файла</button>
+            <button id="save_button">сохранить в файл</button>
+            <!-- Скрытый input для выбора файла -->
+            <input type="file" id="fileInput" accept=".json" style="display: none;" />
             <div id="userTopMenuSelect">
                 <select id="networkSelect"></select>
                 <button id="openSelectedNetworkButton">открыть этот граф</button>

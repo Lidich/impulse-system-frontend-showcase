@@ -1,5 +1,7 @@
 var data = {}
 
+var userFile = {}
+
 import { createChart, createMatrixInput } from './components.js';
 
 await fetch('./data2.json')
@@ -120,6 +122,15 @@ var simulation = d3.forceSimulation(nodes)
     .force("collide", d3.forceCollide().radius(88)) // Добавляем силу коллизии
     .on("tick", ticked);
 
+function updateSimulation(){
+    // simulation = d3.forceSimulation(nodes)
+    // .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+    // .force("charge", d3.forceManyBody().strength(-1))
+    // .force("center", d3.forceCenter(width / 2, height / 2))
+    // .force("collide", d3.forceCollide().radius(88)) // Добавляем силу коллизии
+    // .on("tick", ticked);
+}
+
 // Create the SVG container.
 var svg = d3.create("svg")
     .attr("width", width)
@@ -156,10 +167,12 @@ var link = svg.append("g")
 ; // Используем маркер стрелки
 
 function updateLineView() {
+    //console.log(links)
     link = link
         .data(links)
         .join(
             enter => enter.append("line")
+            .attr("stroke", d => color((d.value-minLinkValue)/(maxLinkValue-minLinkValue+1)))
                 .attr("stroke-width", 2)
                 .attr("marker-end", "url(#arrowhead)")
                 .on("click", editLink),// Инициализация новых элементов
@@ -167,6 +180,7 @@ function updateLineView() {
                 .attr("marker-end", "url(#arrowhead)"), // Обновление существующих элементов
             exit => exit.remove() // Удаление вышедших элементов
         );
+        console.log(nodes)
     //.join("line")
     //.attr("stroke-width", 2)
     //.attr("marker-end", "url(#arrowhead)"); // Убедитесь, что маркер стрелки обновляется
@@ -464,6 +478,7 @@ function addNewLink() {
     reRender()
 }
 
+//DELETE NODE BUTTON
 deleteNodeButton.addEventListener('click', () => {
     nodes = nodes.filter(node => node.id !== tempNodeForEdit.id);
     console.log("links before")
@@ -531,6 +546,10 @@ function spawn(source) {
 
 function reRender() {
     console.log("rerender!!!")
+    links.forEach(link => {
+        link.source = nodes.find(node => node.id === link.source.id) || link.source;
+        link.target = nodes.find(node => node.id === link.target.id) || link.target;
+    });
     updateMinMaxNodeValue()
 
     updateSelect()
@@ -1181,6 +1200,94 @@ editLinkCloseButton.addEventListener('click', () =>{
     statusFlag = statusFlagConstants.idle
 })
 
+
+//SAVE BUTTON
+save_button.addEventListener('click', () =>{
+    // Создаём объект
+const myObject = {
+    nodes: nodes,
+    links: links
+};
+
+// Преобразуем объект в JSON-строку
+const jsonString = JSON.stringify(myObject, null, 2);
+
+// Создаём новый Blob (объект файлового типа) с типом данных application/json
+const blob = new Blob([jsonString], { type: "application/json" });
+
+// Создаём ссылку для скачивания
+const url = URL.createObjectURL(blob);
+
+    // Инициируем скачивание, открыв ссылку в новом окне
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mo4a.json";
+    a.style.display = "none"; // Скрываем элемент
+    document.body.appendChild(a);
+    a.click();
+
+    // Удаляем временную ссылку и элемент <a>
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+})
+
+//LOAD BUTTON
+// Получаем элементы
+const fileInput = document.getElementById("fileInput");
+const openFileBtn = document.getElementById("load_button");
+
+// Обработчик нажатия на кнопку для открытия системного проводника
+openFileBtn.addEventListener("click", function() {
+    fileInput.click(); // Имитируем клик по скрытому input, чтобы открыть проводник
+});
+
+// Обработчик выбора файла
+fileInput.addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    
+    if (file && file.type === "application/json") {
+        const reader = new FileReader();
+
+        // Обработка успешного чтения файла
+        reader.onload = function(e) {
+            const content = e.target.result;
+            try {
+                const json = JSON.parse(content);
+                console.log(json)
+                //links.forEach(element => links.pop(element))
+                //json.links.forEach(element => links.push(element))
+                links = json.links.map(d => ({ ...d }));
+                nodes = json.nodes.map(d => ({ ...d }));
+                //nodes = json.nodes;
+                //links = json.links;
+                reRender();
+                console.log("a")
+                console.log(links)
+                console.log("b")
+            } catch (err) {
+                console.log(err)
+            }
+        };
+
+        reader.readAsText(file); // Чтение файла как текст
+    } else {
+    }
+});
+
+
+
+//DELETE LINK BUTTON
+deleteLinkButton.addEventListener('click', async ()=>{
+    console.log(tempLinkForEdit.source.id)
+    console.log(links)
+    links = links.filter(element => (element.source.id !== tempLinkForEdit.source.id)||(element.target.id !== tempLinkForEdit.target.id));
+    console.log(links)
+    editLinkCloseButton.click()
+    statusFlag = statusFlagConstants.idle;
+    setStatusText()
+    reRender()
+})
+
 //REGISTER SUBMIT BUTTON
 submitRegisterButton.addEventListener('click', async ()=>{
     let login = document.getElementById("signUpLoginInput").value
@@ -1242,4 +1349,7 @@ document.getElementById("rangeSlider").addEventListener('input', () => {
     nodeRadius = val
     reRender()
 })
+
+
+
 
